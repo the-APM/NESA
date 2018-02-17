@@ -23,19 +23,15 @@ data_train[11270]['sentiment']=0
 
 e="a"
 c=0 ##increase this at the end of the iteration
+
+for x in range(0,12936):
+    xd.insert(x,data_train[x]['text'])
+    y.insert(x,data_train[x]['sentiment'])
+                
 while (e!="0"):
     e=raw_input("Enter text for analysis ya press 0 to exit ")
-    if(e!="0"):
-        xd=[]
-        y=[]
-        for x in range(0,12937+c):
-            if(x<12936):
-                xd.insert(x,data_train[x]['text'])
-                y.insert(x,data_train[x]['sentiment'])
-            else:
-                xd.insert(x,e)
-
-
+    if (e!="0"):
+        xd.insert(x,e)
         for i in range(0,12937+c):
             xd[i]=re.sub(r'http/[\w_-]+','url',xd[i])
             xd[i]=re.sub(r'http//[\w_-]+','url',xd[i])
@@ -70,12 +66,10 @@ while (e!="0"):
                 ngram_range=(1, 1), preprocessor=None, stop_words={'english'},
                 strip_accents=None, token_pattern='(?u)\\b\\w\\w+\\b',
                 tokenizer=None, vocabulary=None)
-
         x_vec1=vectorizer.fit_transform(xd)
 
         bigram_vectorizer = CountVectorizer(ngram_range=(1, 2),stop_words={'english'},token_pattern=r'\b\w+\b', min_df=1)
         x_vec2= bigram_vectorizer.fit_transform(xd)
-        
         print("Vectorization done...")
         xtraining_vec1=x_vec1[0:12936+c]
         xtest_vec1=x_vec1[12936+c:]
@@ -110,15 +104,14 @@ while (e!="0"):
         for a in range (0,len(yu_res)-1):
             if ((yu_res[a]==yb_res[a])&(yb_res[a]==nb_res_yu[a])&(nb_res_yu[a]!=nb_res_yb[a])):
                 y_res[a]=yu_res[a]
-
         print y_res
         f=raw_input("Is the predicted sentiment correct?->Y/N=")
         if(f=='Y'):
             y.insert(x,y_res[0])
-            
         else:
             r=input("Please enter the correct sentiment?->1/0/-1=")
             y.insert(x,r)
         c=c+1
+        x=x+1
 
 
